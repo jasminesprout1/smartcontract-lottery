@@ -24,6 +24,8 @@ contract Raffle is VRFConsumerBaseV2 {
     address payable[] private s_players;
     VRFCoordinatorV2Interface private immutable i_vrfCoordinator;
     bytes32 private immutable i_keyHash;
+    uint64 private immutable i_subscriptionId;
+    uint16 private constant REQUEST_CONFIMATIONS = 3;
 
     // Events
 
@@ -32,11 +34,13 @@ contract Raffle is VRFConsumerBaseV2 {
     constructor(
         address vrfCoordinatorV2,
         uint256 entranceFee,
-        bytes32 gasLane
+        bytes32 gasLane,
+        uint64 subscriptionId
     ) VRFConsumerBaseV2(vrfCoordinatorV2) {
         i_entranceFee = entranceFee;
         i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2);
         i_keyHash = gasLane;
+        i_subscriptionId = subscriptionId;
     }
 
     function enterRaffle() public payable {
@@ -57,8 +61,8 @@ contract Raffle is VRFConsumerBaseV2 {
         // Chainlink VRF is a 2-transaction process
 
         i_vrfCoordinator.requestRandomWords(
-            keyHash, // gasLane
-            s_subscriptionId,
+            i_keyHash, // gasLane
+            i_subscriptionId,
             requestConfirmations,
             callbackGasLimit,
             numWords
