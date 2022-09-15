@@ -26,6 +26,8 @@ contract Raffle is VRFConsumerBaseV2 {
     bytes32 private immutable i_keyHash;
     uint64 private immutable i_subscriptionId;
     uint16 private constant REQUEST_CONFIMATIONS = 3;
+    uint32 private immutable i_callbackGasLimit;
+    uint32 private constant NUM_WORDS = 1;
 
     // Events
 
@@ -35,12 +37,14 @@ contract Raffle is VRFConsumerBaseV2 {
         address vrfCoordinatorV2,
         uint256 entranceFee,
         bytes32 gasLane,
-        uint64 subscriptionId
+        uint64 subscriptionId,
+        uint32 callbackGasLimit
     ) VRFConsumerBaseV2(vrfCoordinatorV2) {
         i_entranceFee = entranceFee;
         i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2);
         i_keyHash = gasLane;
         i_subscriptionId = subscriptionId;
+        i_callbackGasLimit = callbackGasLimit;
     }
 
     function enterRaffle() public payable {
@@ -63,9 +67,9 @@ contract Raffle is VRFConsumerBaseV2 {
         i_vrfCoordinator.requestRandomWords(
             i_keyHash, // gasLane
             i_subscriptionId,
-            requestConfirmations,
-            callbackGasLimit,
-            numWords
+            REQUEST_CONFIMATIONS,
+            i_callbackGasLimit,
+            NUM_WORDS
         );
     }
 
