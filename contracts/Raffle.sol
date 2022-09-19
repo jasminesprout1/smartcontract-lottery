@@ -60,7 +60,7 @@ contract Raffle is VRFConsumerBaseV2 {
 
     // Functions
     constructor(
-        address vrfCoordinatorV2,
+        address vrfCoordinatorV2, // Contract address, we'll need to deploy some mocks
         uint256 entranceFee,
         bytes32 gasLane,
         uint64 subscriptionId,
