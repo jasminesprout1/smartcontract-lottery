@@ -8,7 +8,11 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const { deployer } = await getNamedAccounts()
     const args = [BASE_FEE, GAS_PRICE_LINK]
 
-    if (developmentChains.includes(network.name)) {
+    // For fixing the bug
+    const chainId = network.config.chainId
+    // /For fixing the bug
+
+    if (chainId == 31337) {
         log("Local network detected! Deploying mocks...")
         // deploy a mock vrfcoordinator...
         await deploy("VRFCoordinatorV2Mock", {

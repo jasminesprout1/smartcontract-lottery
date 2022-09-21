@@ -27,6 +27,7 @@ module.exports = {
             accounts: [PRIVATE_KEY],
         },
     },
+
     namedAccounts: {
         deployer: {
             default: 0,
